@@ -32,7 +32,7 @@ const app = express();
 app.get(
   "/",
   asyncError(async (req, res, next) => {
-    next(new ErrorHandler("Something went wrong", 500));
+    return next(new ErrorHandler("Something went wrong", 500));
   })
 );
 
@@ -48,14 +48,14 @@ In this example, we use the asyncError middleware to catch any asynchronous erro
 You can also create custom error objects using the ErrorHandler class:
 
 ```js
-const { ErrorHandler } = require('async-express-error-handler');
-const User =require('../models/User');
+const { ErrorHandler } = require("async-express-error-handler");
+const User = require("../models/User");
 
-app.get('/users/:id', (req, res, next) => {
-  const user =await User.FindById(req.params.id);
+app.get("/users/:id", async (req, res, next) => {
+  const user = await User.FindById(req.params.id);
 
   if (!user) {
-  return next(new ErrorHandler('User not found', 404));
+    return next(new ErrorHandler("User not found", 404));
   }
 
   res.json(user);
